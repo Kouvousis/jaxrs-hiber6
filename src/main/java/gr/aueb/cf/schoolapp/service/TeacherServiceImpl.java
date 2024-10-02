@@ -36,11 +36,10 @@ public class TeacherServiceImpl implements ITeacherService {
             Teacher teacher = Mapper.mapToTeacher(insertDTO);
 
             // Insert is NOT idempotent
-//            if (teacherDAO.getByVat(insertDTO.getVat()).isPresent()) {
-//                throw new EntityAlreadyExistsException("Teacher", "Teacher with vat: " + insertDTO.getVat() + " already exists");
-//            }
-            teacherDAO.getByVat(insertDTO.getVat()).orElseThrow(() -> new EntityAlreadyExistsException("Teacher", "Teacher with vat: "
-                    + insertDTO.getVat() + " already exists"));
+            if (teacherDAO.getByVat(insertDTO.getVat()).isPresent()) {
+                throw new EntityAlreadyExistsException("Teacher", "Teacher with vat: " + insertDTO.getVat() + " already exists");
+            }
+
 
             TeacherReadOnlyDTO readOnlyDTO = teacherDAO.insert(teacher)
                             .map(Mapper::mapToTeacherReadOnlyDTO)
