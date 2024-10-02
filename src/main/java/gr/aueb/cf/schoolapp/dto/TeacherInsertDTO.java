@@ -10,11 +10,15 @@ import lombok.*;
 @Setter
 public class TeacherInsertDTO {
 
-    @NotNull
+    @NotNull(message = "Firstname must exist")
     @Size(min = 2, max = 255, message = "Firstname must be between 2-255 characters.")
     private String firstname;
 
-    @NotNull
+    @NotNull(message = "Lastname must exist")
     @Size(min = 2, max = 255, message = "Lastname must be between 2-255 characters.")
     private String lastname;
+
+    @NotNull(message = "VAT must exists")
+    @Size(min = 9, message = "VAT must include at least 9 characters.")
+    private String vat;
 }
