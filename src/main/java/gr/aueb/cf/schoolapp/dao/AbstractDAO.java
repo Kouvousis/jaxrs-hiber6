@@ -65,7 +65,7 @@ public  abstract class AbstractDAO<T extends IdentifiableEntity> implements IGen
 
     @Override
     public List<? extends T> getByCriteria(Map<String, Object> criteria) {
-        return List.of();
+        return getByCriteria(getPersistenceClass(), criteria);
     }
 
     @Override
