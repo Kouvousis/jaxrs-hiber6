@@ -53,6 +53,7 @@ public class TeacherRestController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateTeacher(@PathParam("teacherId") Long teacherId, TeacherUpdateDTO updateDTO)
             throws EntityInvalidArgumentException, EntityNotFoundException {
+        updateDTO.setId(teacherId);
         List<String> errors = ValidatorUtil.validateDTO(updateDTO);
         if (!errors.isEmpty()) {
             throw new EntityInvalidArgumentException("Teacher", String.join(", ", errors));
