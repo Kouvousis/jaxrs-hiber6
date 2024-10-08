@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 public class Mapper {
 
-    private Mapper() {}
+    private Mapper() {
+    }
 
     public static Teacher mapToTeacher(TeacherInsertDTO dto) {
         return new Teacher(null, dto.getVat(), dto.getFirstname(), dto.getLastname());
@@ -41,14 +42,15 @@ public class Mapper {
             filters.put("lastname", filtersDTO.getLastname());
         }
 
-        if(!(filtersDTO.getVat() == null) && !(filtersDTO.getVat().isEmpty())) {
+        if (!(filtersDTO.getVat() == null) && !(filtersDTO.getVat().isEmpty())) {
             filters.put("vat", filtersDTO.getVat());
         }
         return filters;
     }
 
     public static User mapToUser(UserInsertDTO dto) {
-        return new  User(null, dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), RoleType.valueOf(dto.getRole()));
+        return new User(null, dto.getUsername(), SecUtil.hashPassword(dto.getPassword()),
+                RoleType.valueOf(dto.getRole()));
     }
 
     public static UserReadOnlyDTO mapToUserReadOnlyDTO(User user) {

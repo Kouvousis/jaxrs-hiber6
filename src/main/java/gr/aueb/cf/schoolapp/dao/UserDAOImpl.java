@@ -34,7 +34,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements IUserDAO {
                     .getSingleResult();
             return SecUtil.checkPassword(password, user.getPassword());
         } catch (NoResultException e) {
-           return false;
+            return false;
         }
     }
 

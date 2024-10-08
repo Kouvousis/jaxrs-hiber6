@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService {
             JPAHelper.commitTransaction();
             LOGGER.info("User with username: {} inserted", dto.getUsername());
             return readOnlyDTO;
-        } catch (AppServerException e){
+        } catch (AppServerException e) {
             JPAHelper.rollbackTransaction();
             LOGGER.error("Error. User with username: {} not inserted", dto.getUsername());
             throw e;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements IUserService {
                     .orElseThrow(() -> new EntityNotFoundException("User", "User with username: " + username + " not found"));
             JPAHelper.commitTransaction();
             return userReadOnlyDTO;
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             LOGGER.warn("Warning. User with username: {} not found", username);
             throw e;
         } finally {
