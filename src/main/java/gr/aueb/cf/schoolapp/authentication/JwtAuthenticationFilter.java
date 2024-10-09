@@ -18,6 +18,7 @@ import jakarta.ws.rs.ext.Provider;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.net.URI;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -31,8 +32,9 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
     SecurityContext securityContext;
 
     @Override
-    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        UriInfo uriInfo = containerRequestContext.getUriInfo();
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        UriInfo uriInfo = requestContext.getUriInfo();
 
         // if we have /api/auth/register
         // getPath() will return auth/register
@@ -41,8 +43,8 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
             return;
         }
 
-        String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
+        String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new NotAuthorizedException("Authorization header must be provided");
         }
 
@@ -50,12 +52,14 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
 
         try {
             String username = jwtService.extractSubject(token);
-            if (username != null && securityContext == null || securityContext.getUserPrincipal() == null) {
+            if (username != null &&
+                    securityContext == null || securityContext.getUserPrincipal() == null) {
                 User user = userDAO.getByUsername(username).orElse(null);
                 if (user != null && jwtService.isTokenValid(token, user)) {
-                    containerRequestContext.setSecurityContext(new CustomSecurityContext(user));
+                    requestContext.setSecurityContext(new CustomSecurityContext(user));
                 } else {
-                    System.out.println("Token is not valid" + containerRequestContext.getUriInfo());
+                    System.out.println("Token is not valid" + requestContext.getUriInfo());
+                    //
                 }
             }
         } catch (Exception e) {

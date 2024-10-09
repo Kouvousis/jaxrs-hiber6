@@ -1,7 +1,6 @@
 package gr.aueb.cf.schoolapp.service;
 
 import gr.aueb.cf.schoolapp.core.exceptions.AppServerException;
-import gr.aueb.cf.schoolapp.core.exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
 import gr.aueb.cf.schoolapp.dto.UserInsertDTO;
 import gr.aueb.cf.schoolapp.dto.UserReadOnlyDTO;
