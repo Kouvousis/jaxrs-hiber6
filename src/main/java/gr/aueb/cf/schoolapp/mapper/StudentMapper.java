@@ -1,10 +1,15 @@
 package gr.aueb.cf.schoolapp.mapper;
 
+import gr.aueb.cf.schoolapp.core.enums.RoleType;
 import gr.aueb.cf.schoolapp.dto.student.StudentFiltersDTO;
 import gr.aueb.cf.schoolapp.dto.student.StudentInsertDTO;
 import gr.aueb.cf.schoolapp.dto.student.StudentReadOnlyDTO;
 import gr.aueb.cf.schoolapp.dto.student.StudentUpdateDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserInsertDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.schoolapp.model.Student;
+import gr.aueb.cf.schoolapp.model.User;
+import gr.aueb.cf.schoolapp.security.SecUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,5 +50,14 @@ public class StudentMapper {
             filters.put("vat", filtersDTO.getVat());
         }
         return filters;
+    }
+
+    public static User mapToUser(UserInsertDTO dto) {
+        return new User(null, dto.getUsername(), SecUtil.hashPassword(dto.getPassword()),
+                RoleType.valueOf(dto.getRole()));
+    }
+
+    public static UserReadOnlyDTO mapToUserReadOnlyDTO(User user) {
+        return new UserReadOnlyDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRoleType().name());
     }
 }

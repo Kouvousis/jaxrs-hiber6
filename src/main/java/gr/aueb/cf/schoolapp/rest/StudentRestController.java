@@ -13,10 +13,7 @@ import gr.aueb.cf.schoolapp.validator.ValidatorUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -74,8 +71,11 @@ public class StudentRestController {
     @GET
     @Path("/{studentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudent(@PathParam("studentId") Long id)
+    public Response getStudent(@PathParam("studentId") Long id, @Context SecurityContext securityContext)
             throws EntityNotFoundException {
+        if (!securityContext.isUserInRole("TEACHER")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
         StudentReadOnlyDTO dto = studentService.getStudentById(id);
         return Response.status(Response.Status.OK).entity(dto).build();
     }
