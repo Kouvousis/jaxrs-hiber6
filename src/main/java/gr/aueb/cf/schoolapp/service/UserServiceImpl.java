@@ -1,21 +1,18 @@
 package gr.aueb.cf.schoolapp.service;
 
 import gr.aueb.cf.schoolapp.core.exceptions.AppServerException;
-import gr.aueb.cf.schoolapp.core.exceptions.EntityAlreadyExistsException;
-import gr.aueb.cf.schoolapp.core.exceptions.EntityInvalidArgumentException;
+
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
 import gr.aueb.cf.schoolapp.dao.IUserDAO;
-import gr.aueb.cf.schoolapp.dto.TeacherReadOnlyDTO;
-import gr.aueb.cf.schoolapp.dto.UserInsertDTO;
-import gr.aueb.cf.schoolapp.dto.UserReadOnlyDTO;
-import gr.aueb.cf.schoolapp.mapper.Mapper;
+
+import gr.aueb.cf.schoolapp.dto.user.UserInsertDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserReadOnlyDTO;
+import gr.aueb.cf.schoolapp.mapper.TeacherMapper;
 import gr.aueb.cf.schoolapp.model.User;
 import gr.aueb.cf.schoolapp.service.util.JPAHelper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.Inheritance;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +28,13 @@ public class UserServiceImpl implements IUserService {
             throws AppServerException {
         try {
             JPAHelper.beginTransaction();
-            User user = Mapper.mapToUser(dto);
+            User user = TeacherMapper.mapToUser(dto);
 //            if (userDAO.getByUsername(dto.getUsername()).isPresent()) {
 //                throw new EntityAlreadyExistsException("User", "User with username: " + dto.getUsername()
 //                + " already exists");
 //            }
             UserReadOnlyDTO readOnlyDTO = userDAO.insert(user)
-                    .map(Mapper::mapToUserReadOnlyDTO)
+                    .map(TeacherMapper::mapToUserReadOnlyDTO)
                     .orElseThrow(() -> new AppServerException("User", "User with vat: " + dto.getUsername() +
                             " not inserted"));
             JPAHelper.commitTransaction();
@@ -58,7 +55,7 @@ public class UserServiceImpl implements IUserService {
             JPAHelper.beginTransaction();
 
             UserReadOnlyDTO userReadOnlyDTO = userDAO.getByUsername(username)
-                    .map(Mapper::mapToUserReadOnlyDTO)
+                    .map(TeacherMapper::mapToUserReadOnlyDTO)
                     .orElseThrow(() -> new EntityNotFoundException("User", "User with username: " +
                             username + " not found"));
             JPAHelper.commitTransaction();

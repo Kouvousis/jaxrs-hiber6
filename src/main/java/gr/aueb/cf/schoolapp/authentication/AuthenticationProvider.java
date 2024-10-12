@@ -1,6 +1,6 @@
 package gr.aueb.cf.schoolapp.authentication;
 
-import gr.aueb.cf.schoolapp.dto.UserLoginDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserLoginDTO;
 import gr.aueb.cf.schoolapp.service.IUserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

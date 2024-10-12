@@ -93,7 +93,7 @@ public class TeacherRestController {
                                 @QueryParam("vat") String vat) {
         TeacherFiltersDTO filtersDTO = new TeacherFiltersDTO(firstname, lastname, vat);
         Map<String, Object> criteria;
-        criteria = TeacherMapper.mapToCriteriaTeacher(filtersDTO);
+        criteria = TeacherMapper.mapToCriteria(filtersDTO);
         List<TeacherReadOnlyDTO> readOnlyDTOS = teacherService.getTeachersByCriteria(criteria);
         return Response.status(Response.Status.OK).entity(readOnlyDTOS).build();
     }

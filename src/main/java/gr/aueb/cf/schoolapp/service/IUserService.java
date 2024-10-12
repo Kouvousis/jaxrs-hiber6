@@ -2,8 +2,8 @@ package gr.aueb.cf.schoolapp.service;
 
 import gr.aueb.cf.schoolapp.core.exceptions.AppServerException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
-import gr.aueb.cf.schoolapp.dto.UserInsertDTO;
-import gr.aueb.cf.schoolapp.dto.UserReadOnlyDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserInsertDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserReadOnlyDTO;
 
 public interface IUserService {
 

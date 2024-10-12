@@ -2,7 +2,7 @@ package gr.aueb.cf.schoolapp.validator;
 
 import gr.aueb.cf.schoolapp.dao.IUserDAO;
 import gr.aueb.cf.schoolapp.dao.UserDAOImpl;
-import gr.aueb.cf.schoolapp.dto.UserInsertDTO;
+import gr.aueb.cf.schoolapp.dto.user.UserInsertDTO;
 import gr.aueb.cf.schoolapp.service.IUserService;
 import gr.aueb.cf.schoolapp.service.UserServiceImpl;
 
