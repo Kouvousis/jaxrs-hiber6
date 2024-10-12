@@ -3,85 +3,80 @@ package gr.aueb.cf.schoolapp.rest;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityInvalidArgumentException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
-import gr.aueb.cf.schoolapp.dto.teacher.TeacherFiltersDTO;
-import gr.aueb.cf.schoolapp.dto.teacher.TeacherInsertDTO;
-import gr.aueb.cf.schoolapp.dto.teacher.TeacherReadOnlyDTO;
-import gr.aueb.cf.schoolapp.dto.teacher.TeacherUpdateDTO;
-import gr.aueb.cf.schoolapp.mapper.TeacherMapper;
-import gr.aueb.cf.schoolapp.service.ITeacherService;
+import gr.aueb.cf.schoolapp.dto.student.StudentFiltersDTO;
+import gr.aueb.cf.schoolapp.dto.student.StudentInsertDTO;
+import gr.aueb.cf.schoolapp.dto.student.StudentReadOnlyDTO;
+import gr.aueb.cf.schoolapp.dto.student.StudentUpdateDTO;
+import gr.aueb.cf.schoolapp.mapper.StudentMapper;
+import gr.aueb.cf.schoolapp.service.IStudentService;
 import gr.aueb.cf.schoolapp.validator.ValidatorUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-
 
 import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-@Path("/teachers")
-public class TeacherRestController {
+@Path("/students")
+public class StudentRestController {
 
-    //@Inject
-    private final ITeacherService teacherService;
+    private final IStudentService studentService;
 
     @POST
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addTeacher(TeacherInsertDTO insertDTO, @Context UriInfo uriInfo)
+    public Response addStudent(StudentInsertDTO insertDTO, @Context UriInfo uriInfo)
             throws EntityAlreadyExistsException, EntityInvalidArgumentException {
         List<String> errors = ValidatorUtil.validateDTO(insertDTO);
         if (!errors.isEmpty()) {
-            throw new EntityInvalidArgumentException("Teacher", String.join(", ", errors));
+            throw new EntityInvalidArgumentException("Student", String.join(", ", errors));
         }
-        TeacherReadOnlyDTO readOnlyDTO = teacherService.insertTeacher(insertDTO);
+        StudentReadOnlyDTO readOnlyDTO = studentService.insertStudent(insertDTO);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(readOnlyDTO.getId().toString()).build())
                 .entity(readOnlyDTO)
                 .build();
     }
 
     @PUT
-    @Path("/{teacherId}")
+    @Path("/{studentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTeacher(@PathParam("teacherId") Long teacherId, TeacherUpdateDTO updateDTO)
-            throws EntityInvalidArgumentException, EntityNotFoundException {
-        updateDTO.setId(teacherId);
+    public Response updateStudent(@PathParam("studentId") Long studentId, StudentUpdateDTO updateDTO)
+            throws EntityNotFoundException, EntityInvalidArgumentException {
+        updateDTO.setId(studentId);
         List<String> errors = ValidatorUtil.validateDTO(updateDTO);
         if (!errors.isEmpty()) {
-            throw new EntityInvalidArgumentException("Teacher", String.join(", ", errors));
+            throw new EntityInvalidArgumentException("Student", String.join(", ", errors));
         }
 
-        TeacherReadOnlyDTO readOnlyDTO = teacherService.updateTeacher(updateDTO);
+        StudentReadOnlyDTO readOnlyDTO = studentService.updateStudent(updateDTO);
         return Response.status(Response.Status.OK).entity(readOnlyDTO).build();
     }
 
     @DELETE
-    @Path("/{teacherId}")
+    @Path("/{studentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTeacher(@PathParam("teacherId") Long teacherId)
+    public Response deleteStudent(@PathParam("studentId") Long studentId)
             throws EntityNotFoundException {
-
-
-        TeacherReadOnlyDTO dto = teacherService.getTeacherById(teacherId);
-        teacherService.deleteTeacher(teacherId);
+        StudentReadOnlyDTO dto = studentService.getStudentById(studentId);
+        studentService.deleteStudent(studentId);
         return Response.status(Response.Status.OK).entity(dto).build();
     }
 
     @GET
-    @Path("{teacherId}")
+    @Path("/{studentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTeacher(@PathParam("teacherId") Long id, @Context SecurityContext securityContext)
+    public Response getStudent(@PathParam("studentId") Long id)
             throws EntityNotFoundException {
-
-        if (!securityContext.isUserInRole("TEACHER")) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-        TeacherReadOnlyDTO dto = teacherService.getTeacherById(id);
+        StudentReadOnlyDTO dto = studentService.getStudentById(id);
         return Response.status(Response.Status.OK).entity(dto).build();
     }
 
@@ -91,10 +86,10 @@ public class TeacherRestController {
     public Response getFiltered(@QueryParam("firstname") String firstname,
                                 @QueryParam("lastname") String lastname,
                                 @QueryParam("vat") String vat) {
-        TeacherFiltersDTO filtersDTO = new TeacherFiltersDTO(firstname, lastname, vat);
+        StudentFiltersDTO filtersDTO = new StudentFiltersDTO(firstname, lastname, vat);
         Map<String, Object> criteria;
-        criteria = TeacherMapper.mapToCriteriaTeacher(filtersDTO);
-        List<TeacherReadOnlyDTO> readOnlyDTOS = teacherService.getTeachersByCriteria(criteria);
+        criteria = StudentMapper.mapToCriteriaStudent(filtersDTO);
+        List<StudentReadOnlyDTO> readOnlyDTOS = studentService.getStudentByCriteria(criteria);
         return Response.status(Response.Status.OK).entity(readOnlyDTOS).build();
     }
 }
