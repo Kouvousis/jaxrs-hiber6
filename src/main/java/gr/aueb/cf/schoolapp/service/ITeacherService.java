@@ -2,9 +2,9 @@ package gr.aueb.cf.schoolapp.service;
 
 import gr.aueb.cf.schoolapp.core.exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityInvalidArgumentException;
-import gr.aueb.cf.schoolapp.dto.TeacherInsertDTO;
-import gr.aueb.cf.schoolapp.dto.TeacherReadOnlyDTO;
-import gr.aueb.cf.schoolapp.dto.TeacherUpdateDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherInsertDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherReadOnlyDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherUpdateDTO;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
 
 import java.util.List;

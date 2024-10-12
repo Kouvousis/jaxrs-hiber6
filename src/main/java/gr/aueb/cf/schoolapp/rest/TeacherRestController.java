@@ -3,11 +3,11 @@ package gr.aueb.cf.schoolapp.rest;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityInvalidArgumentException;
 import gr.aueb.cf.schoolapp.core.exceptions.EntityNotFoundException;
-import gr.aueb.cf.schoolapp.dto.TeacherFiltersDTO;
-import gr.aueb.cf.schoolapp.dto.TeacherInsertDTO;
-import gr.aueb.cf.schoolapp.dto.TeacherReadOnlyDTO;
-import gr.aueb.cf.schoolapp.dto.TeacherUpdateDTO;
-import gr.aueb.cf.schoolapp.mapper.Mapper;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherFiltersDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherInsertDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherReadOnlyDTO;
+import gr.aueb.cf.schoolapp.dto.teacher.TeacherUpdateDTO;
+import gr.aueb.cf.schoolapp.mapper.TeacherMapper;
 import gr.aueb.cf.schoolapp.service.ITeacherService;
 import gr.aueb.cf.schoolapp.validator.ValidatorUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -90,7 +90,7 @@ public class TeacherRestController {
                                 @QueryParam("vat") String vat) {
         TeacherFiltersDTO filtersDTO = new TeacherFiltersDTO(firstname, lastname, vat);
         Map<String, Object> criteria;
-        criteria = Mapper.mapToCriteria(filtersDTO);
+        criteria = TeacherMapper.mapToCriteriaTeacher(filtersDTO);
         List<TeacherReadOnlyDTO> readOnlyDTOS = teacherService.getTeachersByCriteria(criteria);
         return Response.status(Response.Status.OK).entity(readOnlyDTOS).build();
     }

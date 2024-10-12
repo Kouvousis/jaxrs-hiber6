@@ -1,4 +1,4 @@
-package gr.aueb.cf.schoolapp.dto;
+package gr.aueb.cf.schoolapp.dto.teacher;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
