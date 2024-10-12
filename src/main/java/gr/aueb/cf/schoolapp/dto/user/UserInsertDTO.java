@@ -1,4 +1,4 @@
-package gr.aueb.cf.schoolapp.dto;
+package gr.aueb.cf.schoolapp.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
