@@ -13,10 +13,7 @@ import gr.aueb.cf.schoolapp.validator.ValidatorUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -49,9 +46,13 @@ public class CourseRestController {
     @Path("/{courseId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCourse(@PathParam("courseId") Long courseId, CourseUpdateDTO updateDTO)
+    public Response updateCourse(@PathParam("courseId") Long courseId, CourseUpdateDTO updateDTO,
+                                 @Context SecurityContext securityContext)
             throws EntityNotFoundException, EntityInvalidArgumentException  {
         updateDTO.setId(courseId);
+        if (!securityContext.isUserInRole("TEACHER")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
         List<String> errors = ValidatorUtil.validateDTO(updateDTO);
         if (!errors.isEmpty()) {
             throw new EntityInvalidArgumentException("Course", String.join(", ", errors));
@@ -64,8 +65,11 @@ public class CourseRestController {
     @DELETE
     @Path("/{courseId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteCourse(@PathParam("courseId") Long courseId)
+    public Response deleteCourse(@PathParam("courseId") Long courseId, @Context SecurityContext securityContext)
             throws EntityNotFoundException  {
+        if (!securityContext.isUserInRole("TEACHER")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
         CourseReadOnlyDTO readOnlyDTO = courseService.getCourseById(courseId);
         courseService.deleteCourse(courseId);
         return Response.status(Response.Status.OK).entity(readOnlyDTO).build();
